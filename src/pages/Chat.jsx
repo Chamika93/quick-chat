@@ -1,13 +1,25 @@
-const Home = () => {
+import React, { useState } from 'react'
+import { NewMessageForm, MessageList } from '../components';
+
+const Chat = () => {
+
+    const [ messages, setMessages ] = useState([]);
+
+    const onSendHandler = (message) => {
+      setMessages([...messages, message]);
+    }
+
     return (
-      <div className="container mx-auto mt-[15%]">
-          <div className="w-2/4">
-            <h1 className="text-[44px] font-roboto" data-testid="mainText">Chat</h1>
-            <p className="text-lg font-roboto text-gray-500">Connect, collaborate and celebrate from anywhere with Quick Chat</p>
+      <div className="container mx-auto py-10 h-screen">
+          <div className="w-2/4 mx-auto relative h-full">
+            <div className='absolute bottom-0 w-full'>
+              <MessageList messages={messages} />
+              <NewMessageForm onSend={onSendHandler} />
+            </div>
           </div>
       </div>
     );
   }
   
-  export default Home;
+  export default Chat;
   

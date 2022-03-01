@@ -11,5 +11,16 @@ describe('Create a new chat room', () => {
            .click();
 
         cy.location('pathname').should('match', /\/chat$/);
+
+        cy.get('[data-testid="messageText"]')
+            .type('New message');
+
+        cy.get('[data-testid="sendButton"]')
+            .click();
+
+        cy.get('[data-testid="messageText"]')
+            .should('have.value', '');
+
+        cy.contains('New message');
     })
 })
