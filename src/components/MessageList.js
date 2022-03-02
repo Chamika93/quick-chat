@@ -9,8 +9,8 @@ const Message = ({message}) => {
 
 const MessageList = ({messages}) => {
   return (
-    <div>
-        {messages?.map(message => <Message message={message}/>)}
+    <div data-testid='messages'>
+        {messages?.map((message, index) => <Message key={index} message={message}/>)}
     </div>
   )
 }

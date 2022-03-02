@@ -1,12 +1,42 @@
-import React, { useState } from 'react'
+import React, { useState } from 'react';
+import { useParams } from "react-router-dom";
+import firebase from "firebase";
+
 import { NewMessageForm, MessageList } from '../components';
 
 const Chat = () => {
 
+    let { id } = useParams();
+    const [ user, setUser ] = useState('');
+
+    const db = firebase.firestore();
+    firebase.auth().onAuthStateChanged((user) => {
+      if (user) {
+        setUser(user.uid);
+      }
+    });
+
+
     const [ messages, setMessages ] = useState([]);
 
+    db.collection("chats").doc(id).collection("messages").onSnapshot((querySnapshot) => {
+      let allMsgs = [];
+      querySnapshot.forEach((doc) => {
+          allMsgs.push(doc.data().text);
+      });
+      setMessages(allMsgs);
+    });
+
+
+    const messageRef = db.collection("chats").doc(id).collection("messages").doc();
+
     const onSendHandler = (message) => {
-      setMessages([...messages, message]);
+      messageRef.set({
+        text: message,
+        user,
+        timeStamp: firebase.firestore.FieldValue.serverTimestamp()
+      })
+      // setMessages([...messages, message]);
     }
 
     return (
