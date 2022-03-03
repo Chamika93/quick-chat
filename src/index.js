@@ -13,12 +13,12 @@ import './index.css';
 
 // Your web app's Firebase configuration
 const firebaseConfig = {
-  apiKey: "AIzaSyCx5scdyWokdhTZM4TASYDa_vktofB9gTY",
-  authDomain: "quick-chat-44d86.firebaseapp.com",
-  projectId: "quick-chat-44d86",
-  storageBucket: "quick-chat-44d86.appspot.com",
-  messagingSenderId: "102198199648",
-  appId: "1:102198199648:web:ab3fe3ece9ef2f6c0dca05"
+  apiKey: "AIzaSyCjQ0uszoXUKneQ1a9fPNBwcS28-4uRn0M",
+  authDomain: "chat-app-f7b42.firebaseapp.com",
+  projectId: "chat-app-f7b42",
+  storageBucket: "chat-app-f7b42.appspot.com",
+  messagingSenderId: "801887746136",
+  appId: "1:801887746136:web:7122cc8b1fcba8af97f22d"
 };
 
 // Initialize Firebase

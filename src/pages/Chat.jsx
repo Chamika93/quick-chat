@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { useParams } from "react-router-dom";
 import firebase from "firebase";
+import { useCollectionData } from 'react-firebase-hooks/firestore';
 
 import { NewMessageForm, MessageList } from '../components';
 
@@ -16,17 +17,10 @@ const Chat = () => {
       }
     });
 
+    const messagesRef = db.collection("chats").doc(id).collection("messages");
+    const query = messagesRef.orderBy('createdAt').limit(25);
 
-    const [ messages, setMessages ] = useState([]);
-
-    db.collection("chats").doc(id).collection("messages").onSnapshot((querySnapshot) => {
-      let allMsgs = [];
-      querySnapshot.forEach((doc) => {
-          allMsgs.push(doc.data().text);
-      });
-      setMessages(allMsgs);
-    });
-
+    const [messages] = useCollectionData(query, { idField: 'id' });
 
     const messageRef = db.collection("chats").doc(id).collection("messages").doc();
 
@@ -34,16 +28,15 @@ const Chat = () => {
       messageRef.set({
         text: message,
         user,
-        timeStamp: firebase.firestore.FieldValue.serverTimestamp()
+        createdAt: firebase.firestore.FieldValue.serverTimestamp(),
       })
-      // setMessages([...messages, message]);
     }
 
     return (
       <div className="container mx-auto py-10 h-screen">
           <div className="w-2/4 mx-auto relative h-full">
             <div className='absolute bottom-0 w-full'>
-              <MessageList messages={messages} />
+              {messages && <MessageList messages={messages} currentUser={user} /> }
               <NewMessageForm onSend={onSendHandler} />
             </div>
           </div>
