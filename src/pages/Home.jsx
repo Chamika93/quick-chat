@@ -9,27 +9,19 @@ const Home = () => {
 
   const db = firebase.firestore();
 
-  firebase.auth().onAuthStateChanged((user) => {
-    if (user) {
-      var uid = user.uid;
-      console.log(uid);
-      // navigate('/chat');
-    } else {
-      // User is signed out
-      // ...
-    }
-  });
-
     let navigate = useNavigate();
 
-    const onClickHandler = async () => {
-      firebase.auth().signInAnonymously().catch(alert);
+    const onClickHandler = async ( userName ) => {
+      let { user }  = await firebase.auth().signInAnonymously().catch(alert);
+
+      await db.collection("user").doc(user?.uid).set({
+        name: userName
+      })
  
       var newChatRef = db.collection("chats").doc();
 
       newChatRef.set({
-        name: "Tokyo",
-        country: "Japan"
+        admin: user?.uid,
       })
       navigate(`/chat/${newChatRef.id}`)
     }
@@ -41,7 +33,7 @@ const Home = () => {
             <img src="/banner.jpg" alt="banner" className="w-4/5 mx-auto"/>
           </div>
           <div className="w-2/4">
-            <h1 className="text-[44px] font-roboto" data-testid="mainText">Create a disposable chat quickly without a hassle.</h1>
+            <h1 className="text-[44px] font-roboto" data-testid="mainText">Create a chat quickly without a hassle.</h1>
             <p className="text-lg font-roboto text-gray-500">Connect, collaborate and celebrate from anywhere with Quick Chat</p>
             <NewChatRoomForm  onClickHandler={onClickHandler} />
           </div>
